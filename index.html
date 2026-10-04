@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Report a computer lab problem — BAFSD. No login required." />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Report Problem | BAFSD</title>
+
+  <link rel="icon" type="image/svg+xml" href="report-icon.svg?v=3" />
+  <link rel="icon" type="image/png" href="icon-192.png?v=3" />
+  <link rel="apple-touch-icon" href="icon-192.png?v=3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Lab Report" />
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    [data-bs-theme="dark"] {
+      --bg-body: #0b1120;
+      --bg-surface: #111a2e;
+      --bg-surface-2: #16203a;
+      --border: #24304f;
+      --text: #e6ecf7;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --input-bg: #0f172a;
+      --input-border: #24304f;
+    }
+    [data-bs-theme="light"] {
+      --bg-body: #f4f7fb;
+      --bg-surface: #ffffff;
+      --bg-surface-2: #f8fafc;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      --input-bg: #ffffff;
+      --input-border: #cbd5e1;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    a, a:hover, a:focus { text-decoration: none !important; }
+    body {
+      font-family: 'Plus Jakarta Sans', 'Hind Siliguri', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.12), transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.1), transparent 55%),
+        var(--bg-body);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      padding: 14px 12px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .report-card {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px 24px 16px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14);
+    }
+    .report-card .mb-3 { margin-bottom: 0.7rem !important; }
+    .report-card .form-control { padding: 0.45rem 0.7rem; font-size: 0.88rem; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+    .report-logo {
+      width: 52px; height: 52px; object-fit: contain;
+      border-radius: 14px; background: var(--bg-surface-2); padding: 6px;
+      display: block; margin: 0 auto 10px;
+      transition: transform 150ms ease-out;
+    }
+    /* Stealth staff link: logo looks and behaves exactly like a plain logo.
+       No hover, focus or cursor change — click still opens the staff view. */
+    .staff-link-stealth { display: block; width: fit-content; margin: 0 auto; cursor: default; }
+    .staff-link-stealth:hover .report-logo, .staff-link-stealth:focus .report-logo,
+    .staff-link-stealth:active .report-logo { transform: none; box-shadow: none; }
+    .staff-link-stealth:focus { outline: none; }
+    .staff-link-stealth:focus-visible { outline: none; }
+    .report-title { font-size: 1.15rem; font-weight: 700; text-align: center; margin: 0 0 4px; color: var(--text); }
+    .report-sub { text-align: center; color: var(--text-muted); font-size: 0.83rem; margin: 0 0 14px; }
+    .form-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); margin-bottom: 0.35rem; }
+    .form-control {
+      background-color: var(--input-bg);
+      border-color: var(--input-border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.92rem;
+    }
+    .form-control:focus {
+      background-color: var(--input-bg);
+      border-color: #2563eb;
+      color: var(--text);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .form-control::placeholder { color: var(--text-dim); }
+    .form-text { color: var(--text-dim); font-size: 0.8rem; }
+    .char-count { font-size: 0.75rem; color: var(--text-dim); text-align: right; margin-top: 4px; }
+    .btn-primary { background: #2563eb; border-color: #2563eb; border-radius: 8px; font-weight: 600; padding: 0.65rem 1rem; }
+    .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+    .back-link { display: block; text-align: center; margin-top: 16px; font-size: 0.85rem; color: var(--text-muted); }
+    .back-link:hover { color: #2563eb; }
+    .net-banner {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.82rem; font-weight: 600;
+      background: rgba(245, 158, 11, 0.14); color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 10px; padding: 9px 12px; margin-bottom: 16px;
+    }
+    .net-banner.online { background: rgba(22, 163, 74, 0.12); color: #16a34a; border-color: rgba(22, 163, 74, 0.3); }
+    .queue-note { text-align: center; font-size: 0.78rem; color: var(--text-muted); margin-top: 12px; }
+    .queue-note strong { color: #f59e0b; }
+    .id-choice { display: flex; gap: 8px; flex-wrap: wrap; }
+    .id-option { display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 600; color: var(--text-muted); background: var(--bg-surface-2); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; cursor: pointer; margin: 0; }
+    .id-option:has(input:checked) { border-color: #2563eb; color: #2563eb; }
+    .id-option input { accent-color: #2563eb; margin: 0; }
+    /* ---- Apple-style polish + setup flow ---- */
+    .btn:active, .id-option:active { transform: scale(0.97); transition: transform 100ms ease-out; }
+    .report-card { animation: cardIn 320ms cubic-bezier(0.32,0.72,0,1); }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(10px) scale(0.99); } to { opacity: 1; transform: none; } }
+    .screen-in { animation: screenIn 260ms cubic-bezier(0.32,0.72,0,1); }
+    @keyframes screenIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .report-title { letter-spacing: -0.015em; }
+    .welcome-hero { text-align: center; padding: 8px 0 2px; }
+    .welcome-hero .report-logo { width: 76px; height: 76px; border-radius: 20px; margin-bottom: 12px; }
+    .welcome-steps { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 18px; text-align: left; }
+    .welcome-step { display: flex; gap: 10px; align-items: flex-start; background: var(--bg-surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 0.85rem; }
+    .welcome-step .n { width: 24px; height: 24px; border-radius: 50%; background: #2563eb; color: #fff; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .pc-chip { display: flex; align-items: center; gap: 10px; background: var(--bg-surface-2); border: 1px solid #2563eb; border-radius: 12px; padding: 9px 12px; margin-bottom: 14px; }
+    .pc-chip > i { font-size: 1.3rem; color: #2563eb; flex-shrink: 0; }
+    .pc-chip div { flex: 1; min-width: 0; }
+    .pc-chip strong { display: block; font-size: 0.9rem; word-break: break-word; }
+    .pc-chip span { font-size: 0.75rem; color: var(--text-muted); }
+    .fsteps { display: flex; align-items: center; gap: 6px; margin-bottom: 16px; }
+    .fstep-dot { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600; color: var(--text-dim); }
+    .fstep-dot span { width: 24px; height: 24px; border-radius: 50%; background: var(--bg-surface-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; }
+    .fstep-dot.active { color: #2563eb; }
+    .fstep-dot.active span { background: #2563eb; border-color: #2563eb; color: #fff; }
+    .fstep-dot.done { color: var(--text-muted); }
+    .fstep-dot.done span { background: rgba(22, 163, 74, 0.15); border-color: #16a34a; color: #16a34a; }
+    .fstep-line { flex: 1; height: 1px; background: var(--border); }
+    .fstep-pane { animation: screenIn 220ms cubic-bezier(0.32,0.72,0,1); }
+    .review-box { background: var(--bg-surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 6px 14px; }
+    .review-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .review-row:last-child { border-bottom: none; }
+    .review-row span { flex: 0 0 70px; color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 2px; }
+    .review-row strong { flex: 1; font-weight: 600; word-break: break-word; }
+    :focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; border-radius: 6px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+    @media (prefers-contrast: more) {
+      .report-card, .pc-chip, .welcome-step { border-width: 2px; }
+    }
+    .report-copy { text-align: center; font-size: 0.72rem; color: var(--text-dim); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border); line-height: 1.6; }
+    .report-copy a { color: #2563eb; font-weight: 600; }
+    .honeypot { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    /* Update banner (Electron auto-update) */
+    #updateBanner {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(37, 99, 235, 0.12);
+      border: 1px solid rgba(37, 99, 235, 0.4);
+      color: var(--text); border-radius: 10px;
+      padding: 9px 12px; margin-bottom: 14px; font-size: 0.82rem; font-weight: 600;
+    }
+    #updateBanner i { color: #2563eb; }
+    #updateBanner button { margin-left: auto; flex-shrink: 0; }
+    @media (max-width: 575.98px) {
+      body { padding: 10px 8px; }
+      .report-card { padding: 18px 16px 14px; border-radius: 16px; }
+      .report-logo { width: 46px; height: 46px; }
+      .report-title { font-size: 1.05rem; }
+      .form-row-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="report-card" role="main">
+    <div id="updateBanner" class="d-none" role="status">
+      <i class="bi bi-arrow-down-circle"></i>
+      <span id="updateBannerText">Update ready.</span>
+      <button type="button" class="btn btn-sm btn-primary" id="updateRestartBtn">Restart &amp; Update</button>
+    </div>
+    <!-- Screen 1: Welcome (first launch only) -->
+    <div id="screenWelcome" class="screen d-none">
+      <div class="welcome-hero">
+        <img src="logo.png" alt="BAFSD Logo" class="report-logo" />
+        <h1 class="report-title">Welcome to Computer Lab Report</h1>
+        <p class="report-sub">Report PC problems in seconds — works even without internet.</p>
+      </div>
+      <div class="welcome-steps">
+        <div class="welcome-step"><span class="n">1</span><span>Bind this app to this PC once with its Serial Number.</span></div>
+        <div class="welcome-step"><span class="n">2</span><span>Write the problem title and description, then submit.</span></div>
+        <div class="welcome-step"><span class="n">3</span><span>Lab staff review it — offline reports auto-send when internet returns.</span></div>
+      </div>
+      <button type="button" class="btn btn-primary w-100" id="welcomeNextBtn">Set Up This PC <i class="bi bi-arrow-right ms-1"></i></button>
+    </div>
+
+    <!-- Screen 2: PC binding (serial) -->
+    <div id="screenBind" class="screen d-none">
+      <div class="text-center">
+        <img src="logo.png" alt="BAFSD Logo" class="report-logo" />
+        <h1 class="report-title">Set Up This PC</h1>
+        <p class="report-sub">Enter this PC's Serial Number once. You won't be asked again.</p>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="bindSerial">PC Serial Number *</label>
+        <input type="text" class="form-control" id="bindSerial" placeholder="e.g. SN-0007 (see sticker on PC)" required maxlength="40" autocomplete="off" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="bindName">PC Name</label>
+        <input type="text" class="form-control" id="bindName" placeholder="Auto-filled — you can edit" maxlength="60" autocomplete="off" />
+        <div class="form-text">Auto-filled from the serial. Edit only if the lab uses a different name.</div>
+      </div>
+      <div id="bindError" class="alert alert-danger d-none" role="alert"></div>
+      <button type="button" class="btn btn-primary w-100" id="bindSaveBtn"><i class="bi bi-check2-circle me-1"></i>Save & Continue</button>
+    </div>
+
+    <!-- Screen 3: Report form -->
+    <div id="screenForm" class="screen d-none">
+      <a href="rptview.html" class="staff-link-stealth" aria-label="View submitted reports"><img src="logo.png" alt="BAFSD Logo" class="report-logo" /></a>
+      <!-- <a href="rptview.html" title="Staff: view submitted reports" aria-label="View submitted reports"><img src="logo.png" alt="BAFSD Logo" class="report-logo" /></a> -->
+      <h1 class="report-title"><i class="bi bi-flag me-2"></i>Report Problem</h1>
+      <p class="report-sub">Lab staff will review your report.</p>
+
+      <div id="pcChip" class="pc-chip">
+        <i class="bi bi-pc-display"></i>
+        <div><strong id="pcChipName">—</strong><span id="pcChipSerial">—</span></div>
+      </div>
+
+      <div id="cmdNote" class="alert alert-info d-none" role="status" style="font-size:0.82rem;">Staff PIN was updated by admin on this PC.</div>
+
+      <div id="netBanner" class="net-banner d-none" role="status">
+        <i class="bi bi-wifi-off"></i><span id="netBannerText">Offline — report will be saved on this device and sent automatically.</span>
+      </div>
+
+      <div class="fsteps" aria-hidden="true">
+        <div class="fstep-dot active" data-dot="1"><span>1</span>Info</div>
+        <div class="fstep-line"></div>
+        <div class="fstep-dot" data-dot="2"><span>2</span>Problem</div>
+        <div class="fstep-line"></div>
+        <div class="fstep-dot" data-dot="3"><span>3</span>Review</div>
+      </div>
+
+      <form id="publicReportForm" novalidate>
+        <!-- Step 1: who are you -->
+        <div class="fstep-pane" data-pane="1">
+          <div class="mb-3">
+            <label class="form-label" for="prName">Your Name <span class="form-text">(optional)</span></label>
+            <input type="text" class="form-control" id="prName" placeholder="Your name" maxlength="60" autocomplete="off" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Your Identity *</label>
+            <div class="id-choice" role="radiogroup" aria-label="Identity type">
+              <label class="id-option"><input type="radio" name="idMode" value="sid" checked /> Student ID</label>
+              <label class="id-option"><input type="radio" name="idMode" value="cls" /> Class Info</label>
+            </div>
+            <div id="idSidWrap" class="mt-2">
+              <input type="text" class="form-control" id="prStudentId" placeholder="e.g. 20112568" maxlength="30" autocomplete="off" required />
+            </div>
+            <div id="idClsWrap" class="mt-2 d-none">
+              <div class="row g-2">
+                <div class="col-6"><input type="text" class="form-control" id="prVersion" placeholder="Version" maxlength="20" autocomplete="off" required /></div>
+                <div class="col-6"><input type="text" class="form-control" id="prShift" placeholder="Shift" maxlength="20" autocomplete="off" required /></div>
+                <div class="col-6"><input type="text" class="form-control" id="prClass" placeholder="Class" maxlength="20" autocomplete="off" required /></div>
+                <div class="col-6"><input type="text" class="form-control" id="prSection" placeholder="Section" maxlength="20" autocomplete="off" required /></div>
+                <div class="col-6"><input type="text" class="form-control" id="prRoll" placeholder="Roll" maxlength="20" autocomplete="off" required /></div>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary w-100" data-next="2">Continue <i class="bi bi-arrow-right ms-1"></i></button>
+        </div>
+
+        <!-- Step 2: the problem -->
+        <div class="fstep-pane d-none" data-pane="2">
+          <div class="mb-3">
+            <label class="form-label" for="prTitle">Problem Title *</label>
+            <input type="text" class="form-control" id="prTitle" placeholder="e.g. Mouse not working" required maxlength="120" autocomplete="off" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="prDesc">Problem Description *</label>
+            <textarea class="form-control" id="prDesc" rows="4" required maxlength="500" placeholder="e.g. The mouse cursor does not move on this PC"></textarea>
+            <div class="char-count"><span id="prCharCount">0</span>/500</div>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary flex-fill" data-back="1"><i class="bi bi-arrow-left me-1"></i>Back</button>
+            <button type="button" class="btn btn-primary flex-fill" data-next="3">Review <i class="bi bi-arrow-right ms-1"></i></button>
+          </div>
+        </div>
+
+        <!-- Step 3: review + submit -->
+        <div class="fstep-pane d-none" data-pane="3">
+          <div class="review-box">
+            <div class="review-row"><span>PC</span><strong id="rvPc">—</strong></div>
+            <div class="review-row"><span>Name</span><strong id="rvName">—</strong></div>
+            <div class="review-row"><span>Identity</span><strong id="rvId">—</strong></div>
+            <div class="review-row"><span>Title</span><strong id="rvTitle">—</strong></div>
+            <div class="review-row"><span>Problem</span><strong id="rvDesc">—</strong></div>
+          </div>
+          <div class="d-flex gap-2 mt-3">
+            <button type="button" class="btn btn-outline-secondary flex-fill" data-back="2"><i class="bi bi-arrow-left me-1"></i>Back</button>
+            <button type="submit" class="btn btn-primary flex-fill" id="publicReportSubmitBtn">
+              <span class="btn-label"><i class="bi bi-send me-1"></i> Submit</span>
+              <span class="spinner-border spinner-border-sm ms-2 d-none" id="publicReportSpinner"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="honeypot" aria-hidden="true">
+          <label for="prWebsite">Website</label>
+          <input type="text" id="prWebsite" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div id="prError" class="alert alert-danger d-none mt-3" role="alert"></div>
+      </form>
+
+      <div id="prSuccess" class="alert alert-success d-none mt-3" role="alert">
+        <i class="bi bi-check-circle-fill me-1"></i> Report submitted. Thank you!
+      </div>
+
+      <button type="button" class="btn btn-outline-secondary w-100 mt-2 d-none" id="reportAnotherBtn">
+        <i class="bi bi-plus-lg me-1"></i> Submit Another Report
+      </button>
+
+      <p class="queue-note d-none" id="queueNote"><i class="bi bi-hourglass-split me-1"></i><strong id="queueCount">0</strong> report(s) waiting on this device — will auto-send when internet returns.</p>
+    </div>
+
+    <div class="report-copy">
+      © <span class="footerYear">2026</span> BAFSD Computer Lab Maintenance System. All rights reserved.<br />
+      Developed by <a href="https://mohammadullah.web.app" target="_blank" rel="noopener noreferrer">Mohammadullah Al Hanafi</a>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("bafsd-theme") || "dark";
+        document.documentElement.setAttribute("data-bs-theme", saved);
+      } catch (e) {
+        document.documentElement.setAttribute("data-bs-theme", "dark");
+      }
+      try {
+        document.querySelectorAll(".footerYear").forEach(function (n) {
+          n.textContent = new Date().getFullYear();
+        });
+      } catch (e) {}
+    })();
+  </script>
+
+  <script type="module">
+    import {
+      normalizePcInput,
+      queueReport,
+      countUnsynced,
+      syncQueue,
+      pushOne,
+      markSynced,
+      markFailed,
+      getDb,
+      loadBinding,
+      saveBinding,
+      clearBinding,
+      markAppOpen,
+      writeTelemetry,
+      pollCommands,
+      executeApprovedWipe,
+      syncWipeState,
+    } from "./report-lib.js";
+
+    const $ = (id) => document.getElementById(id);
+    const form = $("publicReportForm");
+    const descEl = $("prDesc");
+    const countEl = $("prCharCount");
+    const errBox = $("prError");
+    const okBox = $("prSuccess");
+    const submitBtn = $("publicReportSubmitBtn");
+    const spinner = $("publicReportSpinner");
+    const anotherBtn = $("reportAnotherBtn");
+    const netBanner = $("netBanner");
+    const netBannerText = $("netBannerText");
+    const queueNote = $("queueNote");
+    const queueCount = $("queueCount");
+
+    let binding = loadBinding();
+    let nameTouched = false;
+
+    function showScreen(name) {
+      ["Welcome", "Bind", "Form"].forEach((n) => $("screen" + n)?.classList.add("d-none"));
+      const el = $("screen" + name);
+      if (!el) return;
+      el.classList.remove("d-none");
+      el.classList.remove("screen-in");
+      void el.offsetWidth;
+      el.classList.add("screen-in");
+    }
+
+    function paintChip() {
+      if (!binding) return;
+      $("pcChipName").textContent = binding.pcName || "—";
+      $("pcChipSerial").textContent = "S/N: " + (binding.serial || "—");
+    }
+
+    function enterForm() {
+      paintChip();
+      showScreen("Form");
+      goStep(1);
+    }
+
+    function showError(msg) {
+      errBox.textContent = msg;
+      errBox.classList.remove("d-none");
+      okBox.classList.add("d-none");
+    }
+
+    /* ---------- multi-step form ---------- */
+    let fstep = 1;
+    function goStep(n) {
+      fstep = n;
+      errBox.classList.add("d-none");
+      document.querySelectorAll(".fstep-pane").forEach((p) => {
+        const on = Number(p.dataset.pane) === n;
+        p.classList.toggle("d-none", !on);
+        if (on) {
+          p.classList.remove("screen-in");
+          void p.offsetWidth;
+          p.classList.add("screen-in");
+        }
+      });
+      document.querySelectorAll(".fstep-dot").forEach((d) => {
+        const i = Number(d.dataset.dot);
+        d.classList.toggle("active", i === n);
+        d.classList.toggle("done", i < n);
+      });
+      if (n === 3) fillReview();
+      const first = document.querySelector(`.fstep-pane[data-pane="${n}"] input, .fstep-pane[data-pane="${n}"] textarea`);
+      if (first) setTimeout(() => first.focus(), 120);
+    }
+
+    function fillReview() {
+      const who = collectIdentity();
+      $("rvPc").textContent = binding ? `${binding.pcName} (${binding.serial})` : "—";
+      $("rvName").textContent = ($("prName").value || "").trim() || "—";
+      $("rvId").textContent = who.studentLabel || "—";
+      $("rvTitle").textContent = ($("prTitle").value || "").trim() || "—";
+      $("rvDesc").textContent = (descEl.value || "").trim() || "—";
+    }
+
+    document.querySelectorAll("[data-next]").forEach((b) => b.addEventListener("click", () => {
+      const next = Number(b.dataset.next);
+      if (next === 3) {
+        const title = ($("prTitle").value || "").trim();
+        const desc = (descEl.value || "").trim();
+        if (!title || !desc) {
+          showError("Problem title and description are required.");
+          return;
+        }
+      }
+      goStep(next);
+    }));
+    document.querySelectorAll("[data-back]").forEach((b) => b.addEventListener("click", () => goStep(Number(b.dataset.back))));
+
+    function showBindError(msg) {
+      const box = $("bindError");
+      box.textContent = msg;
+      box.classList.remove("d-none");
+    }
+
+    /* ---------- setup flow ---------- */
+    $("welcomeNextBtn")?.addEventListener("click", () => {
+      $("bindError").classList.add("d-none");
+      showScreen("Bind");
+      setTimeout(() => $("bindSerial")?.focus(), 80);
+    });
+
+    $("bindSerial")?.addEventListener("input", () => {
+      if (nameTouched) return;
+      const nameEl = $("bindName");
+      if (nameEl && document.activeElement !== nameEl) {
+        nameEl.value = normalizePcInput($("bindSerial").value || "");
+      }
+    });
+    $("bindName")?.addEventListener("input", () => { nameTouched = true; });
+
+    function openBind() {
+      $("bindError").classList.add("d-none");
+      showScreen("Bind");
+      setTimeout(() => $("bindSerial")?.focus(), 80);
+    }
+
+    $("bindSaveBtn")?.addEventListener("click", () => {
+      $("bindError").classList.add("d-none");
+      const serial = ($("bindSerial").value || "").trim();
+      if (!serial) { showBindError("Please enter this PC's Serial Number."); return; }
+      const pcName = ($("bindName").value || "").trim() || normalizePcInput(serial);
+      binding = saveBinding({ serial, pcName });
+      nameTouched = false;
+      enterForm();
+      writeTelemetry(binding, { force: true, queuedCount: countUnsynced() });
+    });
+
+
+
+    /* ---------- form helpers ---------- */
+    descEl.addEventListener("input", () => {
+      countEl.textContent = String(descEl.value.length);
+    });
+
+    function syncIdMode() {
+      const cls = document.querySelector('input[name="idMode"]:checked')?.value === "cls";
+      document.getElementById("idSidWrap").classList.toggle("d-none", cls);
+      document.getElementById("idClsWrap").classList.toggle("d-none", !cls);
+    }
+    document.querySelectorAll('input[name="idMode"]').forEach((r) => r.addEventListener("change", syncIdMode));
+
+    function collectIdentity() {
+      const mode = document.querySelector('input[name="idMode"]:checked')?.value || "sid";
+      const val = (id) => (document.getElementById(id)?.value || "").trim().slice(0, 20);
+      if (mode === "cls") {
+        const meta = { version: val("prVersion"), shift: val("prShift"), className: val("prClass"), section: val("prSection"), roll: val("prRoll") };
+        const labels = [["Version", meta.version], ["Shift", meta.shift], ["Class", meta.className], ["Section", meta.section], ["Roll", meta.roll]];
+        const filled = labels.filter((p) => p[1]);
+        return { studentId: "", studentMeta: meta, studentLabel: filled.map((p) => p[0] + ": " + p[1]).join(" • ") };
+      }
+      const sid = (document.getElementById("prStudentId")?.value || "").trim().slice(0, 30);
+      return { studentId: sid, studentMeta: null, studentLabel: sid ? "ID: " + sid : "" };
+    }
+
+    function refreshQueueNote() {
+      const n = countUnsynced();
+      queueCount.textContent = String(n);
+      queueNote.classList.toggle("d-none", n === 0);
+    }
+
+    function refreshNetBanner() {
+      const online = navigator.onLine;
+      netBanner.classList.remove("d-none");
+      netBanner.classList.toggle("online", online);
+      netBanner.querySelector("i").className = online ? "bi bi-wifi" : "bi bi-wifi-off";
+      netBannerText.textContent = online
+        ? "Online — reports send directly to lab staff."
+        : "Offline — report will be saved on this device and sent automatically.";
+    }
+
+    async function runOnlineJobs() {
+      refreshNetBanner();
+      if (!navigator.onLine || !getDb()) { refreshQueueNote(); return; }
+      try {
+        await syncQueue();
+      } catch (_) {}
+      refreshQueueNote();
+      if (binding) {
+        try {
+          const res = await pollCommands(binding);
+          for (const w of res.wipes) {
+            const done = await executeApprovedWipe(w);
+            if (done === "reloaded") return; // reloading into welcome flow
+          }
+          const rej = await syncWipeState(binding);
+          if (rej.reloaded) return;
+          if (res.applied.some((a) => a.type === "pin-change" || a.type === "pin-reset")) {
+            $("cmdNote")?.classList.remove("d-none");
+          }
+        } catch (_) {}
+        refreshQueueNote();
+        writeTelemetry(binding, { force: false, queuedCount: countUnsynced() });
+      }
+    }
+
+    window.addEventListener("online", runOnlineJobs);
+    window.addEventListener("offline", refreshNetBanner);
+    // Pick up manager-issued PIN and wipe commands while the app stays open.
+    setInterval(() => {
+      if (navigator.onLine) runOnlineJobs();
+    }, 60000);
+
+    anotherBtn.addEventListener("click", () => {
+      form.reset();
+      syncIdMode();
+      countEl.textContent = "0";
+      okBox.classList.add("d-none");
+      errBox.classList.add("d-none");
+      anotherBtn.classList.add("d-none");
+      form.classList.remove("d-none");
+      goStep(1);
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (document.getElementById("prWebsite").value) return; // bot — silently drop
+
+      try {
+        const last = Number(localStorage.getItem("bafsd-last-report") || 0);
+        if (Date.now() - last < 60 * 1000) {
+          showError("Please wait a minute before sending another report.");
+          return;
+        }
+      } catch (_) {}
+
+      if (!binding) {
+        showError("This PC is not set up yet. Please set the Serial Number first.");
+        openBind(false);
+        return;
+      }
+      const title = ($("prTitle").value || "").trim().slice(0, 120);
+      const desc = (descEl.value || "").trim();
+      const reporter = (document.getElementById("prName").value || "").trim().slice(0, 60);
+
+      if (!title || !desc) {
+        showError("Problem title and description are required.");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      spinner.classList.remove("d-none");
+      errBox.classList.add("d-none");
+
+      try {
+        // 1) Always save locally first (offline-safe history on this device).
+        const who = collectIdentity();
+        const item = queueReport({
+          pcRaw: binding.serial,
+          deviceName: binding.pcName,
+          serial: binding.serial,
+          reporterName: reporter,
+          title,
+          description: desc,
+          studentId: who.studentId,
+          studentMeta: who.studentMeta,
+          studentLabel: who.studentLabel,
+        });
+        // 2) Try to push immediately when online.
+        let pushed = false;
+        if (navigator.onLine && getDb()) {
+          try {
+            await pushOne(item);
+            markSynced(item.id);
+            pushed = true;
+          } catch (err) {
+            console.warn("Direct push failed, kept in queue:", err);
+            markFailed(item.id, err && err.code ? err.code : "error");
+          }
+        }
+        try { localStorage.setItem("bafsd-last-report", String(Date.now())); } catch (_) {}
+        form.reset();
+        syncIdMode();
+        countEl.textContent = "0";
+        okBox.innerHTML = pushed
+          ? '<i class="bi bi-check-circle-fill me-1"></i> Report submitted. Thank you!'
+          : '<i class="bi bi-check-circle-fill me-1"></i> Saved on this device — will auto-send when internet returns.';
+        okBox.classList.remove("d-none");
+        form.classList.add("d-none");
+        anotherBtn.classList.remove("d-none");
+        refreshQueueNote();
+      } catch (err) {
+        console.error("Report save failed:", err);
+        showError(err && err.message === "queue-full"
+          ? "This device storage is full. Please ask lab staff to sync."
+          : "Could not save. Please try again.");
+      } finally {
+        submitBtn.disabled = false;
+        spinner.classList.add("d-none");
+      }
+    });
+
+    /* ---------- auto-update banner (Electron only; no-op on web) ---------- */
+    (function initUpdaterBanner() {
+      const api = window.labReportUpdater;
+      if (!api || !api.onUpdateDownloaded) return;
+      const banner = document.getElementById("updateBanner");
+      const text = document.getElementById("updateBannerText");
+      const restartBtn = document.getElementById("updateRestartBtn");
+      api.onUpdateAvailable((info) => {
+        text.textContent = "Downloading update" + (info && info.version ? " v" + info.version : "") + "…";
+        banner.classList.remove("d-none");
+        restartBtn.disabled = true;
+      });
+      api.onUpdateDownloaded((info) => {
+        text.textContent = "Update ready" + (info && info.version ? " (v" + info.version + ")" : "") + " — restart to install.";
+        banner.classList.remove("d-none");
+        restartBtn.disabled = false;
+      });
+      restartBtn.addEventListener("click", () => {
+        restartBtn.disabled = true;
+        text.textContent = "Installing update — the app will restart…";
+        api.restartAndInstall();
+      });
+    })();
+
+    /* ---------- boot ---------- */
+    markAppOpen();
+    binding = loadBinding();
+    if (!binding) {
+      showScreen("Welcome");
+    } else {
+      enterForm();
+    }
+    refreshNetBanner();
+    refreshQueueNote();
+    runOnlineJobs();
+    if (binding) writeTelemetry(binding, { force: true, queuedCount: countUnsynced() });
+  </script>
+</body>
+</html>

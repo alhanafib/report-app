@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Computer Lab Reports — Staff View | BAFSD</title>
+
+  <link rel="icon" type="image/png" href="logo.png" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    [data-bs-theme="dark"] {
+      --bg-body: #0b1120; --bg-surface: #111a2e; --bg-surface-2: #16203a;
+      --border: #24304f; --border-soft: #1c2740;
+      --text: #e6ecf7; --text-muted: #94a3b8; --text-dim: #64748b;
+      --input-bg: #0f172a; --input-border: #24304f;
+    }
+    [data-bs-theme="light"] {
+      --bg-body: #f4f7fb; --bg-surface: #ffffff; --bg-surface-2: #f8fafc;
+      --border: #e2e8f0; --border-soft: #eef2f7;
+      --text: #0f172a; --text-muted: #64748b; --text-dim: #94a3b8;
+      --input-bg: #ffffff; --input-border: #cbd5e1;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    a, a:hover, a:focus { text-decoration: none !important; }
+    body {
+      font-family: 'Plus Jakarta Sans', 'Hind Siliguri', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-body); color: var(--text);
+      min-height: 100vh; padding: 20px 14px 60px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .staff-wrap { max-width: 860px; margin: 0 auto; }
+    .staff-head {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 16px 18px; margin-bottom: 14px;
+    }
+    .staff-head-icon {
+      width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0;
+      background: linear-gradient(150deg, #2563eb 0%, #0ea5e9 100%);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    }
+    .staff-head-icon img { width: 34px; height: 34px; object-fit: contain; }
+    .staff-head h1 { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.01em; margin: 0; }
+    .staff-head p { font-size: 0.78rem; color: var(--text-muted); margin: 2px 0 0; }
+    .staff-head .ms-auto { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .stat-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .stat-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: var(--bg-surface-2); border: 1px solid var(--border-soft); color: var(--text-muted); }
+    .stat-chip b { font-size: 0.8rem; color: var(--text); }
+    .stat-chip.q b { color: #f59e0b; }
+    .stat-chip.s b { color: #16a34a; }
+    .btn-primary { background: #2563eb; border-color: #2563eb; font-weight: 600; }
+    .btn-primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+    .btn:active { transform: scale(0.97); transition: transform 100ms ease-out; }
+    .filter-row { display: flex; gap: 6px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+    .filter-row .btn.active { background: #2563eb; border-color: #2563eb; color: #fff; }
+    .net-pill { font-size: 0.78rem; font-weight: 600; padding: 5px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px; }
+    .net-pill.off { background: rgba(245,158,11,.14); color: #f59e0b; }
+    .net-pill.on { background: rgba(22,163,74,.12); color: #16a34a; }
+    .rep-card {
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 14px 16px; margin-bottom: 10px;
+      border-left: 4px solid var(--border);
+      animation: repIn 260ms cubic-bezier(0.32, 0.72, 0, 1) backwards;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+    @keyframes repIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .rep-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1); }
+    .rep-card:active { transform: translateY(-1px) scale(0.995); }
+    .rep-queued { border-left-color: #f59e0b; }
+    .rep-synced { border-left-color: #16a34a; }
+    .rep-failed { border-left-color: #dc2626; }
+    .rep-cardTop { display: flex; align-items: flex-start; gap: 10px; }
+    .rep-pc-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg-surface-2); color: #2563eb; font-size: 1rem;
+    }
+    .rep-head-main { flex: 1; min-width: 0; }
+    .rep-device { font-weight: 700; font-size: 0.95rem; }
+    .rep-reporter { font-size: 0.78rem; color: var(--text-muted); margin-top: 1px; }
+    .id-chip { display: inline-flex; align-items: center; gap: 4px; background: var(--bg-surface-2); border: 1px solid var(--border-soft); border-radius: 12px; padding: 1px 8px; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); }
+    .id-chip i { color: #2563eb; }
+    .rep-desc { font-size: 0.9rem; margin: 8px 0 4px; word-break: break-word; }
+    .rep-meta { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+    .meta-mini { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; color: var(--text-dim); }
+    .meta-mini.err { color: #dc2626; }
+    .rep-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+    .badge-soft { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+    .badge-soft.queued { background: rgba(245,158,11,.14); color: #f59e0b; }
+    .badge-soft.synced { background: rgba(22,163,74,.14); color: #16a34a; }
+    .badge-soft.failed { background: rgba(220,38,38,.14); color: #dc2626; }
+    .form-control, .form-select { background-color: var(--input-bg); border-color: var(--input-border); color: var(--text); font-size: 0.88rem; }
+    .form-control:focus, .form-select:focus { background-color: var(--input-bg); border-color: #2563eb; color: var(--text); box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
+    /* PIN gate — same look as the main app Security PIN screen */
+    .pin-screen { min-height: 88vh; display: flex; align-items: center; justify-content: center; padding: 20px 12px; }
+    .pin-gate { width: 100%; max-width: 420px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 16px; padding: 40px 32px 26px; text-align: center; box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14); }
+    .pin-gate img { width: 68px; height: 68px; object-fit: contain; border-radius: 16px; background: var(--bg-surface-2); padding: 7px; margin-bottom: 16px; }
+    .pin-gate h1 { font-size: 1.2rem; font-weight: 700; margin: 0 0 6px; color: var(--text); }
+    .pin-gate .pin-sub { color: var(--text-muted); font-size: 0.9rem; margin: 0 0 24px; }
+    .pin-field { text-align: left; }
+    .pin-field .form-label { font-size: 0.85rem; font-weight: 500; color: var(--text-muted); }
+    #pinInput, #pinPromptInput { font-size: 1.05rem; letter-spacing: 0.12em; text-align: center; font-family: ui-monospace, monospace; }
+    /* Small PIN prompt overlay (delete confirm) — same card style */
+    .pin-overlay { position: fixed; inset: 0; z-index: 1050; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(2, 6, 23, 0.6); backdrop-filter: blur(3px); }
+    .pin-overlay .pin-gate { padding: 30px 26px 22px; animation: popIn 240ms cubic-bezier(0.32,0.72,0,1); }
+    @keyframes popIn { from { opacity: 0; transform: translateY(10px) scale(0.97); } to { opacity: 1; transform: none; } }
+    /* ---- Staff tabs (translucent sticky chrome) ---- */
+    .staff-tabs {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; gap: 4px; padding: 8px;
+      background: rgba(17, 26, 46, 0.72);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--border); border-radius: 14px;
+      margin-bottom: 14px;
+    }
+    [data-bs-theme="light"] .staff-tabs { background: rgba(255, 255, 255, 0.72); }
+    .staff-tab {
+      flex: 1; border: none; background: transparent; color: var(--text-muted);
+      font-size: 0.85rem; font-weight: 600; padding: 9px 6px; border-radius: 10px;
+      cursor: pointer; transition: all 180ms ease;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .staff-tab:active { transform: scale(0.97); }
+    .staff-tab.active { background: #2563eb; color: #fff; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); }
+    .stab-in { animation: screenIn 260ms cubic-bezier(0.32,0.72,0,1); }
+    @keyframes screenIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    /* ---- PC info + danger zone ---- */
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    @media (max-width: 575.98px) { .info-grid { grid-template-columns: 1fr; } }
+    .info-cell { background: var(--bg-surface-2); border: 1px solid var(--border-soft); border-radius: 10px; padding: 10px 12px; }
+    .info-cell .k { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); }
+    .info-cell .v { font-size: 0.92rem; font-weight: 600; word-break: break-word; }
+    .danger-card { border: 1px solid rgba(220, 38, 38, 0.4); border-radius: 14px; padding: 16px; margin-bottom: 12px; background: var(--bg-surface); }
+    .danger-card h3 { font-size: 0.95rem; margin: 0 0 4px; display: flex; align-items: center; gap: 8px; }
+    .danger-card p { font-size: 0.82rem; color: var(--text-muted); margin: 0 0 12px; }
+    .wait-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: rgba(245,158,11,.14); color: #f59e0b; }
+    #cfInput { letter-spacing: 0.1em; text-align: center; font-weight: 700; }
+    .btn:active, .rep-card:active { transform: scale(0.98); transition: transform 100ms ease-out; }
+    :focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; border-radius: 6px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+    @media (prefers-contrast: more) {
+      .staff-tabs, .rep-card, .danger-card { border-width: 2px; }
+    }
+    .empty-box { text-align: center; color: var(--text-muted); padding: 44px 16px; background: var(--bg-surface); border: 1px dashed var(--border); border-radius: 14px; font-size: 0.9rem; }
+    .empty-box svg { width: 130px; height: auto; display: block; margin: 0 auto 10px; }
+    .empty-box h3 { font-size: 1rem; color: var(--text); margin: 0 0 4px; }
+    @media (prefers-reduced-motion: reduce) {
+      .rep-card { animation: fadeOnly 120ms ease-out; }
+      @keyframes fadeOnly { from { opacity: 0; } to { opacity: 1; } }
+    }
+    .staff-copy { text-align: center; font-size: 0.75rem; color: var(--text-dim); margin-top: 26px; line-height: 1.7; }
+    .staff-copy a { color: #2563eb; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <!-- PIN gate — same security PIN as the main app login -->
+  <div id="pinGate" class="pin-screen d-none">
+    <div class="pin-gate">
+      <a href="index.html" title="Staff: view submitted reports" aria-label="View submitted reports"><img src="logo.png" alt="BAFSD" /></a>
+      <h1 id="pinGateHeading">Security PIN Required</h1>
+      <p class="pin-sub" id="pinGateSub">Enter your staff PIN to continue.</p>
+      <div id="pinEntryWrap">
+        <div class="mb-3 pin-field">
+          <label class="form-label" for="pinInput">Secret PIN</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+            <input type="password" class="form-control" id="pinInput" placeholder="••••••••" autocomplete="off" maxlength="64" />
+            <button class="btn btn-outline-secondary" type="button" id="pinEyeBtn" aria-label="Show PIN"><i class="bi bi-eye"></i></button>
+          </div>
+        </div>
+        <div id="pinGateError" class="alert alert-danger d-none" role="alert"></div>
+        <div id="pinGateCooldown" class="alert alert-warning d-none" role="alert">
+          <i class="bi bi-clock-history me-2"></i>Too many attempts. Try again in <strong id="pinGateTimer">60</strong>s.
+        </div>
+      </div>
+      <button class="btn btn-primary w-100" type="button" id="pinGateBtn">Unlock</button>
+    </div>
+  </div>
+
+  <!-- Small PIN prompt (delete confirm) -->
+  <div id="pinPrompt" class="pin-overlay d-none">
+    <div class="pin-gate">
+      <h1 id="pinPromptTitle">Confirm with PIN</h1>
+      <p class="pin-sub" id="pinPromptSub">Enter your security PIN to delete this report.</p>
+      <div class="mb-3 pin-field">
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+          <input type="password" class="form-control" id="pinPromptInput" placeholder="••••••••" autocomplete="off" maxlength="64" />
+          <button class="btn btn-outline-secondary" type="button" id="pinPromptEyeBtn" aria-label="Show PIN"><i class="bi bi-eye"></i></button>
+        </div>
+      </div>
+      <div id="pinPromptError" class="alert alert-danger d-none" role="alert"></div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary flex-fill" type="button" id="pinPromptCancel">Cancel</button>
+        <button class="btn btn-danger flex-fill" type="button" id="pinPromptOk">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div id="staffMain" class="staff-wrap d-none">
+    <div class="staff-head">
+      
+      <div class="staff-head-icon"><a href="index.html" title="Staff: view submitted reports" aria-label="View submitted reports"><img src="logo.png" alt="BAFSD" /></a></div>
+      <div style="flex:1;min-width:0;">
+        <h1>Computer Lab Reports — Staff View</h1>
+        <p>Reports saved on <strong>this device</strong> (this browser). Students cannot see or delete these.</p>
+        <div class="stat-chips">
+          <span class="stat-chip">Total <b id="statTotal">0</b></span>
+          <span class="stat-chip q">Queued <b id="statQueued">0</b></span>
+          <span class="stat-chip s">Synced <b id="statSynced">0</b></span>
+        </div>
+      </div>
+      <div class="ms-auto">
+        <span id="netPill" class="net-pill off"><i class="bi bi-wifi-off"></i>Offline</span>
+        <button class="btn btn-primary btn-sm" type="button" id="syncNowBtn"><i class="bi bi-arrow-repeat me-1"></i>Sync Now</button>
+        <button class="btn btn-outline-secondary btn-sm" type="button" id="lockBtn"><i class="bi bi-lock me-1"></i>Lock</button>
+      </div>
+    </div>
+
+    <div class="staff-tabs" role="tablist" aria-label="Staff sections">
+      <button class="staff-tab active" data-stab="dashboard" type="button" role="tab"><i class="bi bi-grid-1x2"></i>Dashboard</button>
+      <button class="staff-tab" data-stab="pc" type="button" role="tab"><i class="bi bi-pc-display"></i>PC Details</button>
+      <button class="staff-tab" data-stab="settings" type="button" role="tab"><i class="bi bi-gear"></i>Settings</button>
+    </div>
+
+    <div id="syncMsg" class="alert alert-info d-none" role="status"></div>
+
+    <!-- TAB: Dashboard (reports) -->
+    <div id="stabDashboard">
+      <div class="filter-row" role="group" aria-label="Filter">
+        <button class="btn btn-outline-secondary btn-sm active" data-filter="all" type="button">All</button>
+        <button class="btn btn-outline-secondary btn-sm" data-filter="queued" type="button">Queued</button>
+        <button class="btn btn-outline-secondary btn-sm" data-filter="synced" type="button">Synced</button>
+        <button class="btn btn-outline-secondary btn-sm" data-filter="failed" type="button">Failed</button>
+        <span class="text-muted ms-auto" style="font-size:0.8rem;" id="queueSummary"></span>
+      </div>
+      <div id="staffList"></div>
+      <div id="staffEmpty" class="empty-box d-none">
+        <svg viewBox="0 0 160 120" aria-hidden="true">
+          <ellipse cx="80" cy="62" rx="60" ry="50" fill="rgba(37,99,235,0.12)"/>
+          <path d="M80 24l30 11v22c0 19-13 31-30 38-17-7-30-19-30-38V35z" fill="#16a34a" opacity="0.14"/>
+          <path d="M80 24l30 11v22c0 19-13 31-30 38-17-7-30-19-30-38V35z" fill="none" stroke="#16a34a" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M69 60l8 8 15-17" stroke="#16a34a" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="40" cy="36" r="3.5" fill="#f59e0b"/>
+          <circle cx="122" cy="42" r="3.5" fill="#0ea5e9"/>
+        </svg>
+        <h3>All clear — no reports here</h3>
+        <div>Student reports saved on this device will appear here.</div>
+      </div>
+    </div>
+
+    <!-- TAB: PC Details -->
+    <div id="stabPc" class="d-none">
+      <div class="rep-card">
+        <div class="rep-cardTop">
+          <div class="rep-pc-icon"><i class="bi bi-pc-display"></i></div>
+          <div class="rep-head-main">
+            <div class="rep-device" id="pcTabName">—</div>
+            <div class="rep-reporter">Bound PC on this device</div>
+          </div>
+          <span class="badge-soft synced" id="pcTabPin">PIN: default</span>
+        </div>
+        <div class="info-grid mt-3">
+          <div class="info-cell"><div class="k">Serial Number</div><div class="v" id="pcTabSerial">—</div></div>
+          <div class="info-cell"><div class="k">Bound On</div><div class="v" id="pcTabBound">—</div></div>
+          <div class="info-cell"><div class="k">App Version</div><div class="v" id="pcTabVer">—</div></div>
+          <div class="info-cell"><div class="k">Last Sync</div><div class="v" id="pcTabSync">—</div></div>
+          <div class="info-cell"><div class="k">Reports (total)</div><div class="v" id="pcTabTotal">0</div></div>
+          <div class="info-cell"><div class="k">Waiting to Sync</div><div class="v" id="pcTabWaiting">0</div></div>
+        </div>
+        <div class="rep-actions">
+          <button class="btn btn-sm btn-outline-primary" type="button" id="pcSyncBtn"><i class="bi bi-arrow-repeat me-1"></i>Sync Now</button>
+          <button class="btn btn-sm btn-outline-secondary" type="button" id="pcChangeBtn"><i class="bi bi-arrow-left-right me-1"></i>Change PC</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Settings -->
+    <div id="stabSettings" class="d-none">
+      <div class="danger-card">
+        <h3><i class="bi bi-trash" style="color:#dc2626;"></i>Delete All Local Reports</h3>
+        <p>Removes every report saved on this device (queued + synced history). Needs confirm + PIN, then website approval.</p>
+        <div id="waitReportsWrap" class="d-none mb-2"><span class="wait-pill"><i class="bi bi-hourglass-split"></i>Waiting for website approval…</span></div>
+        <button class="btn btn-outline-danger btn-sm" type="button" id="delReportsBtn"><i class="bi bi-trash me-1"></i>Delete All Reports</button>
+      </div>
+      <div class="danger-card">
+        <h3><i class="bi bi-exclamation-triangle" style="color:#dc2626;"></i>Delete All App Data</h3>
+        <p>Wipes reports, PC binding and local state — the app returns to the welcome screen. 2-step confirm + PIN + website approval.</p>
+        <div id="waitAllWrap" class="d-none mb-2"><span class="wait-pill"><i class="bi bi-hourglass-split"></i>Waiting for website approval…</span></div>
+        <button class="btn btn-danger btn-sm" type="button" id="delAllBtn"><i class="bi bi-trash me-1"></i>Delete All App Data</button>
+      </div>
+      <div class="danger-card" style="border-color: var(--border);">
+        <h3><i class="bi bi-lock"></i>Lock</h3>
+        <p>Lock this staff view. PIN will be required again.</p>
+        <button class="btn btn-outline-secondary btn-sm" type="button" id="lockBtn2"><i class="bi bi-lock me-1"></i>Lock Now</button>
+      </div>
+    </div>
+
+    <div class="staff-copy">© <span class="footerYear">2026</span> BAFSD Computer Lab Maintenance System. All rights reserved.<br />Developed by <a href="https://mohammadullah.web.app" target="_blank" rel="noopener noreferrer">Mohammadullah Al Hanafi</a></div>
+  </div>
+
+  <!-- Generic confirm modal (no native dialogs) -->
+  <div id="cfModal" class="pin-overlay d-none">
+    <div class="pin-gate">
+      <h1 id="cfTitle">Are you sure?</h1>
+      <p class="pin-sub" id="cfMsg"></p>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary flex-fill" type="button" id="cfCancelBtn">Cancel</button>
+        <button class="btn btn-danger flex-fill" type="button" id="cfOkBtn">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step-2 modal: type DELETE + PIN -->
+  <div id="wipeModal" class="pin-overlay d-none">
+    <div class="pin-gate">
+      <h1 id="wipeTitle">Final Confirmation</h1>
+      <p class="pin-sub" id="wipeSub">Type DELETE and enter your staff PIN.</p>
+      <div class="mb-2 pin-field">
+        <input type="text" class="form-control" id="cfInput" placeholder="Type DELETE" autocomplete="off" maxlength="10" />
+      </div>
+      <div class="mb-3 pin-field">
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+          <input type="password" class="form-control" id="wipePinInput" placeholder="Staff PIN" autocomplete="off" maxlength="64" />
+          <button class="btn btn-outline-secondary" type="button" id="wipePinEyeBtn" aria-label="Show PIN"><i class="bi bi-eye"></i></button>
+        </div>
+      </div>
+      <div id="wipeError" class="alert alert-danger d-none" role="alert"></div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary flex-fill" type="button" id="wipeCancelBtn">Cancel</button>
+        <button class="btn btn-danger flex-fill" type="button" id="wipeOkBtn">Delete Everything</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      try {
+        document.documentElement.setAttribute("data-bs-theme", localStorage.getItem("bafsd-theme") || "dark");
+      } catch (e) { document.documentElement.setAttribute("data-bs-theme", "dark"); }
+      try {
+        document.querySelectorAll(".footerYear").forEach(function (n) { n.textContent = new Date().getFullYear(); });
+      } catch (e) {}
+    })();
+  </script>
+
+  <script type="module">
+    import {
+      loadQueue, syncQueue, verifyStaffPin,
+      loadBinding, clearBinding, createWipeRequest,
+      getDeletePending, setDeletePending, syncWipeState, executeApprovedWipe,
+      markStaffView, writeTelemetry, pollCommands, pinMode, countUnsynced, APP_VERSION,
+    } from "./report-lib.js";
+
+    const SESSION_KEY = "bafsd-staff-unlocked";
+    const COOL_KEY = "bafsd-staff-cool-until";
+    const MAX_ATTEMPTS = 3;
+    const COOLDOWN_MS = 60 * 1000;
+    let filter = "all";
+    let pinAttempts = 0;
+
+    const $ = (id) => document.getElementById(id);
+    const pinGate = $("pinGate"), staffMain = $("staffMain");
+
+    function esc(s) {
+      return String(s == null ? "" : s)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+    function fmtTime(iso) {
+      try {
+        const d = new Date(iso);
+        return isNaN(d) ? "—" : d.toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+      } catch (_) { return "—"; }
+    }
+
+    /* ---------- PIN gate (same security PIN as the main app) ---------- */
+    function coolRemaining() {
+      try {
+        return Math.max(0, Number(localStorage.getItem(COOL_KEY) || 0) - Date.now());
+      } catch (_) { return 0; }
+    }
+
+    function tickCooldown(boxId, timerId) {
+      const box = $(boxId), timer = $(timerId);
+      const update = () => {
+        const left = Math.ceil(coolRemaining() / 1000);
+        if (left <= 0) {
+          box?.classList.add("d-none");
+          pinAttempts = 0;
+          return;
+        }
+        if (timer) timer.textContent = String(left);
+        box?.classList.remove("d-none");
+        setTimeout(update, 500);
+      };
+      update();
+    }
+
+    function bindEye(btnId, inputId) {
+      $(btnId)?.addEventListener("click", () => {
+        const input = $(inputId);
+        if (!input) return;
+        const show = input.type === "password";
+        input.type = show ? "text" : "password";
+        const icon = $(btnId)?.querySelector("i");
+        if (icon) icon.className = show ? "bi bi-eye-slash" : "bi bi-eye";
+        input.focus();
+      });
+    }
+    bindEye("pinEyeBtn", "pinInput");
+    bindEye("pinPromptEyeBtn", "pinPromptInput");
+
+    async function bootGate() {
+      let unlocked = false;
+      try { unlocked = sessionStorage.getItem(SESSION_KEY) === "1"; } catch (_) {}
+      if (unlocked) { showMain(); return; }
+      pinGate.classList.remove("d-none");
+      // Default staff PIN (@bafsd#1206) always works — no setup needed.
+      // Main-app login PIN also works if this browser unlocked it before.
+      $("pinEntryWrap").classList.remove("d-none");
+      $("pinGateHeading").textContent = "Security PIN Required";
+      $("pinGateSub").textContent = "Enter your staff PIN to continue.";
+      $("pinGateBtn").innerHTML = '<i class="bi bi-unlock me-1"></i>Unlock';
+      if (coolRemaining() > 0) tickCooldown("pinGateCooldown", "pinGateTimer");
+      setTimeout(() => $("pinInput")?.focus(), 100);
+    }
+
+    function gateError(msg) {
+      const box = $("pinGateError");
+      box.textContent = msg;
+      box.classList.remove("d-none");
+    }
+
+    $("pinGateBtn").addEventListener("click", async () => {
+      if (coolRemaining() > 0) return;
+      $("pinGateError").classList.add("d-none");
+      const pin = ($("pinInput").value || "").trim();
+      if (!pin) return gateError("Please enter your PIN.");
+      const ok = await verifyStaffPin(pin);
+      if (ok) {
+        pinAttempts = 0;
+        try { sessionStorage.setItem(SESSION_KEY, "1"); } catch (_) {}
+        showMain();
+        return;
+      }
+      pinAttempts += 1;
+      $("pinInput").value = "";
+      if (pinAttempts >= MAX_ATTEMPTS) {
+        try { localStorage.setItem(COOL_KEY, String(Date.now() + COOLDOWN_MS)); } catch (_) {}
+        gateError("Too many attempts. Please wait.");
+        tickCooldown("pinGateCooldown", "pinGateTimer");
+      } else {
+        gateError(`Incorrect PIN. Attempts remaining: ${MAX_ATTEMPTS - pinAttempts}.`);
+      }
+    });
+    $("pinInput")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") $("pinGateBtn").click();
+    });
+
+    /* ---------- shared PIN prompt (delete confirm) ---------- */
+    let promptResolve = null;
+    function askPin(title, sub) {
+      $("pinPromptTitle").textContent = title || "Confirm with PIN";
+      $("pinPromptSub").textContent = sub || "Enter your security PIN to continue.";
+      $("pinPromptInput").value = "";
+      $("pinPromptError").classList.add("d-none");
+      $("pinPrompt").classList.remove("d-none");
+      setTimeout(() => $("pinPromptInput")?.focus(), 80);
+      return new Promise((resolve) => { promptResolve = resolve; });
+    }
+    function closePrompt(result) {
+      $("pinPrompt").classList.add("d-none");
+      if (promptResolve) { promptResolve(result); promptResolve = null; }
+    }
+    $("pinPromptCancel").addEventListener("click", () => closePrompt(false));
+    $("pinPromptInput")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") $("pinPromptOk").click();
+    });
+    $("pinPromptOk").addEventListener("click", async () => {
+      if (coolRemaining() > 0) {
+        const box = $("pinPromptError");
+        box.textContent = "Locked — try again in a minute.";
+        box.classList.remove("d-none");
+        return;
+      }
+      const ok = await verifyStaffPin(($("pinPromptInput").value || "").trim());
+      if (ok) { pinAttempts = 0; closePrompt(true); return; }
+      pinAttempts += 1;
+      $("pinPromptInput").value = "";
+      if (pinAttempts >= MAX_ATTEMPTS) {
+        try { localStorage.setItem(COOL_KEY, String(Date.now() + COOLDOWN_MS)); } catch (_) {}
+        const box = $("pinPromptError");
+        box.textContent = "Too many attempts. Try again in 60s.";
+        box.classList.remove("d-none");
+        setTimeout(() => closePrompt(false), 1200);
+      } else {
+        const box = $("pinPromptError");
+        box.textContent = `Incorrect PIN. Attempts remaining: ${MAX_ATTEMPTS - pinAttempts}.`;
+        box.classList.remove("d-none");
+      }
+    });
+
+    $("lockBtn")?.addEventListener("click", () => {
+      try { sessionStorage.removeItem(SESSION_KEY); } catch (_) {}
+      location.reload();
+    });
+
+    /* ---------- tabs ---------- */
+    function setTab(name) {
+      document.querySelectorAll("[data-stab]").forEach((b) => b.classList.toggle("active", b.dataset.stab === name));
+      ["Dashboard", "Pc", "Settings"].forEach((n) => {
+        const pane = $("stab" + n);
+        if (!pane) return;
+        const on = n.toLowerCase() === name;
+        pane.classList.toggle("d-none", !on);
+        if (on) {
+          pane.classList.remove("stab-in");
+          void pane.offsetWidth;
+          pane.classList.add("stab-in");
+        }
+      });
+      if (name === "pc") renderPcTab();
+      try { sessionStorage.setItem("bafsd-staff-tab", name); } catch (_) {}
+    }
+    document.querySelectorAll("[data-stab]").forEach((b) => b.addEventListener("click", () => setTab(b.dataset.stab)));
+
+    /* ---------- generic confirm (no native dialogs) ---------- */
+    let cfResolve = null;
+    function askConfirm({ title = "Are you sure?", message = "", okLabel = "Confirm", danger = true } = {}) {
+      $("cfTitle").textContent = title;
+      $("cfMsg").textContent = message;
+      const ok = $("cfOkBtn");
+      ok.textContent = okLabel;
+      ok.className = danger ? "btn btn-danger flex-fill" : "btn btn-primary flex-fill";
+      $("cfModal").classList.remove("d-none");
+      return new Promise((resolve) => { cfResolve = resolve; });
+    }
+    function closeConfirm(result) {
+      $("cfModal").classList.add("d-none");
+      if (cfResolve) { cfResolve(result); cfResolve = null; }
+    }
+    $("cfCancelBtn").addEventListener("click", () => closeConfirm(false));
+    $("cfOkBtn").addEventListener("click", () => closeConfirm(true));
+    $("cfModal").addEventListener("click", (event) => {
+      if (event.target === $("cfModal")) closeConfirm(false);
+    });
+
+    /* ---------- list ---------- */
+    function badge(sync) {
+      if (sync === "synced") return '<span class="badge-soft synced">Synced ✓</span>';
+      if (sync === "failed") return '<span class="badge-soft failed">Failed — will retry</span>';
+      return '<span class="badge-soft queued">Queued — on this device</span>';
+    }
+
+    function pendingBadge(id) {
+      const p = getDeletePending();
+      return p[id] ? ' <span class="wait-pill"><i class="bi bi-hourglass-split"></i>Awaiting approval</span>' : "";
+    }
+
+    function renderList() {
+      const all = loadQueue();
+      const unsynced = all.filter((x) => x.sync !== "synced").length;
+      const synced = all.filter((x) => x.sync === "synced").length;
+      $("queueSummary").textContent = all.length ? `${unsynced} waiting to sync` : "";
+      $("statTotal").textContent = String(all.length);
+      $("statQueued").textContent = String(unsynced);
+      $("statSynced").textContent = String(synced);
+      const list = all.filter((x) => filter === "all" ? true : x.sync === filter);
+      const box = $("staffList");
+      $("staffEmpty").classList.toggle("d-none", list.length > 0);
+      box.innerHTML = list.map((r, idx) => `
+        <div class="rep-card rep-${esc(r.sync || "queued")}" data-rep="${esc(r.id)}" style="animation-delay:${Math.min(idx, 8) * 40}ms">
+          <div class="rep-cardTop">
+            <div class="rep-pc-icon"><i class="bi bi-pc-display"></i></div>
+            <div class="rep-head-main">
+              <div class="rep-device">${esc(r.deviceName || r.pcRaw || "Unknown PC")}</div>
+              <div class="rep-reporter">From: ${esc(r.reporterName || "Student")}</div>
+            </div>
+            ${badge(r.sync)}
+          </div>
+          ${r.studentLabel ? `<div style="margin-top:6px;"><span class="id-chip"><i class="bi bi-person-badge"></i>${esc(r.studentLabel)}</span></div>` : ""}
+          <div class="rep-desc">${esc(r.description || "")}</div>
+          <div class="rep-meta">
+            <span class="meta-mini"><i class="bi bi-clock"></i>Saved ${esc(fmtTime(r.createdAt))}</span>
+            ${r.syncedAt ? `<span class="meta-mini"><i class="bi bi-check2-circle"></i>Synced ${esc(fmtTime(r.syncedAt))}</span>` : ""}
+            ${r.error ? `<span class="meta-mini err"><i class="bi bi-exclamation-triangle"></i>${esc(r.error)}</span>` : ""}
+          </div>
+          <div class="rep-actions">
+            <button class="btn btn-sm btn-outline-danger" data-del="${esc(r.id)}" type="button"><i class="bi bi-trash me-1"></i>Delete (needs PIN)</button>${pendingBadge(r.id)}
+          </div>
+        </div>`).join("");
+      box.querySelectorAll("[data-del]").forEach((b) => b.addEventListener("click", () => requestReportDelete(b.dataset.del)));
+    }
+
+    async function requestReportDelete(reportId) {
+      const binding = loadBinding();
+      const ok = await askConfirm({
+        title: "Delete This Report?",
+        message: "The report will be queued for deletion and needs website approval before it is removed.",
+        okLabel: "Continue",
+        danger: true,
+      });
+      if (!ok) return;
+      const pinOk = await askPin("Confirm with PIN", "Enter your security PIN to request deletion.");
+      if (!pinOk) return;
+      if (!navigator.onLine) {
+        flashMsg("Offline — connect to the internet to send the delete request.", "warning");
+        return;
+      }
+      try {
+        const reqId = await createWipeRequest({
+          serial: binding?.serial || "",
+          pcName: binding?.pcName || "",
+          kind: "report",
+          reportId,
+        });
+        setDeletePending(reportId, reqId);
+        flashMsg("Delete request sent — waiting for website approval.", "info");
+        renderList();
+      } catch (err) {
+        console.error(err);
+        flashMsg("Could not send delete request.", "danger");
+      }
+    }
+
+    let msgTimer = null;
+    function flashMsg(text, kind) {
+      const box = $("syncMsg");
+      box.textContent = text;
+      box.className = "alert alert-" + (kind || "info");
+      clearTimeout(msgTimer);
+      msgTimer = setTimeout(() => box.classList.add("d-none"), 4000);
+    }
+
+    document.querySelectorAll("[data-filter]").forEach((b) => b.addEventListener("click", () => {
+      filter = b.dataset.filter;
+      document.querySelectorAll("[data-filter]").forEach((x) => x.classList.toggle("active", x === b));
+      renderList();
+    }));
+
+    /* ---------- PC tab ---------- */
+    function lastSyncText() {
+      try {
+        const at = Number(localStorage.getItem("bafsd-telemetry-at") || 0);
+        if (!at) return "Never";
+        return new Date(at).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+      } catch (_) {
+        return "Never";
+      }
+    }
+
+    function renderPcTab() {
+      const b = loadBinding();
+      $("pcTabName").textContent = b?.pcName || "Not bound";
+      $("pcTabSerial").textContent = b?.serial || "—";
+      try {
+        $("pcTabBound").textContent = b?.boundAt
+          ? new Date(b.boundAt).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
+          : "—";
+      } catch (_) {
+        $("pcTabBound").textContent = "—";
+      }
+      $("pcTabVer").textContent = APP_VERSION;
+      $("pcTabSync").textContent = lastSyncText();
+      const all = loadQueue();
+      $("pcTabTotal").textContent = String(all.length);
+      $("pcTabWaiting").textContent = String(all.filter((x) => x.sync !== "synced").length);
+      const pm = pinMode();
+      const pill = $("pcTabPin");
+      pill.textContent = pm.mode === "custom" ? "PIN: admin-set" : "PIN: default";
+      pill.className = pm.mode === "custom" ? "badge-soft info" : "badge-soft synced";
+    }
+
+    $("pcSyncBtn")?.addEventListener("click", () => doSync(true));
+    $("pcChangeBtn")?.addEventListener("click", async () => {
+      const ok = await askConfirm({
+        title: "Change Bound PC?",
+        message: "Future reports will use the new PC. Existing queued reports stay untouched.",
+        okLabel: "Change PC",
+        danger: false,
+      });
+      if (!ok) return;
+      clearBinding();
+      flashMsg("PC unbound — set up the new PC on the report page.", "info");
+      renderPcTab();
+    });
+
+    /* ---------- settings: deletes (confirm + PIN + website approval) ---------- */
+    function refreshWaitPills() {
+      const p = getDeletePending();
+      const hasReports = Object.keys(p).some((k) => k !== "__all__");
+      $("waitReportsWrap")?.classList.toggle("d-none", !hasReports);
+      $("waitAllWrap")?.classList.toggle("d-none", !p.__all__);
+    }
+
+    async function requestDeleteReports() {
+      const binding = loadBinding();
+      const all = loadQueue();
+      if (!all.length) {
+        flashMsg("No reports on this device.", "info");
+        return;
+      }
+      const ok = await askConfirm({
+        title: "Delete All Local Reports?",
+        message: `${all.length} report(s) on this device will be queued for deletion. Website approval is required before removal.`,
+        okLabel: "Continue",
+        danger: true,
+      });
+      if (!ok) return;
+      const pinOk = await askPin("Confirm with PIN", "Enter your security PIN to request deletion.");
+      if (!pinOk) return;
+      if (!navigator.onLine) {
+        flashMsg("Offline — connect to the internet to send the delete request.", "warning");
+        return;
+      }
+      try {
+        for (const r of all) {
+          const reqId = await createWipeRequest({
+            serial: binding?.serial || "",
+            pcName: binding?.pcName || "",
+            kind: "report",
+            reportId: r.id,
+          });
+          setDeletePending(r.id, reqId);
+        }
+        flashMsg("Delete requests sent — waiting for website approval.", "info");
+        renderList();
+        refreshWaitPills();
+      } catch (err) {
+        console.error(err);
+        flashMsg("Could not send delete requests.", "danger");
+      }
+    }
+
+    let wipeTarget = null;
+    function openWipeStep2() {
+      $("wipeError").classList.add("d-none");
+      $("cfInput").value = "";
+      $("wipePinInput").value = "";
+      $("wipeModal").classList.remove("d-none");
+      setTimeout(() => $("cfInput")?.focus(), 80);
+    }
+    bindEye("wipePinEyeBtn", "wipePinInput");
+
+    async function requestDeleteAll() {
+      const ok = await askConfirm({
+        title: "Delete ALL App Data?",
+        message: "Step 1 of 2 — this wipes reports, PC binding and local state. The app returns to the welcome screen. Website approval is also required.",
+        okLabel: "Continue",
+        danger: true,
+      });
+      if (!ok) return;
+      wipeTarget = "all";
+      openWipeStep2();
+    }
+
+    $("delReportsBtn")?.addEventListener("click", requestDeleteReports);
+    $("delAllBtn")?.addEventListener("click", requestDeleteAll);
+    $("wipeCancelBtn")?.addEventListener("click", () => {
+      $("wipeModal").classList.add("d-none");
+      wipeTarget = null;
+    });
+    $("cfInput")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") $("wipeOkBtn").click();
+    });
+    $("wipePinInput")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") $("wipeOkBtn").click();
+    });
+    $("wipeOkBtn")?.addEventListener("click", async () => {
+      if ($("cfInput").value.trim() !== "DELETE") {
+        const box = $("wipeError");
+        box.textContent = 'Please type DELETE exactly to confirm.';
+        box.classList.remove("d-none");
+        return;
+      }
+      if (coolRemaining() > 0) {
+        const box = $("wipeError");
+        box.textContent = "Locked — try again in a minute.";
+        box.classList.remove("d-none");
+        return;
+      }
+      const pinOk = await verifyStaffPin(($("wipePinInput").value || "").trim());
+      if (!pinOk) {
+        pinAttempts += 1;
+        const box = $("wipeError");
+        if (pinAttempts >= MAX_ATTEMPTS) {
+          try { localStorage.setItem(COOL_KEY, String(Date.now() + COOLDOWN_MS)); } catch (_) {}
+          box.textContent = "Too many attempts. Please wait 60s.";
+          setTimeout(() => {
+            $("wipeModal").classList.add("d-none");
+            wipeTarget = null;
+            tickCooldown("pinGateCooldown", "pinGateTimer");
+          }, 1200);
+        } else {
+          box.textContent = `Wrong PIN. Attempts remaining: ${MAX_ATTEMPTS - pinAttempts}.`;
+        }
+        box.classList.remove("d-none");
+        return;
+      }
+      pinAttempts = 0;
+      if (!navigator.onLine) {
+        const box = $("wipeError");
+        box.textContent = "Offline — connect to the internet to send the request.";
+        box.classList.remove("d-none");
+        return;
+      }
+      try {
+        const binding = loadBinding();
+        const reqId = await createWipeRequest({
+          serial: binding?.serial || "",
+          pcName: binding?.pcName || "",
+          kind: "all-data",
+          reportId: null,
+        });
+        setDeletePending("__all__", reqId);
+        $("wipeModal").classList.add("d-none");
+        wipeTarget = null;
+        flashMsg("Wipe request sent — waiting for website approval.", "info");
+        refreshWaitPills();
+      } catch (err) {
+        console.error(err);
+        const box = $("wipeError");
+        box.textContent = "Could not send wipe request.";
+        box.classList.remove("d-none");
+      }
+    });
+    $("lockBtn2")?.addEventListener("click", () => {
+      try { sessionStorage.removeItem(SESSION_KEY); } catch (_) {}
+      location.reload();
+    });
+
+    /* ---------- sync ---------- */
+    function refreshNet() {
+      const pill = $("netPill");
+      const on = navigator.onLine;
+      pill.innerHTML = on ? '<i class="bi bi-wifi"></i>Online' : '<i class="bi bi-wifi-off"></i>Offline';
+      pill.className = "net-pill " + (on ? "on" : "off");
+    }
+
+    async function doSync(manual) {
+      if (!navigator.onLine) {
+        if (manual) flashMsg("Offline — will sync automatically when internet returns.", "warning");
+        return;
+      }
+      const r = await syncQueue().catch(() => ({ sent: 0, failed: 0 }));
+      const binding = loadBinding();
+      if (binding) {
+        try {
+          const res = await pollCommands(binding);
+          for (const w of res.wipes) {
+            const done = await executeApprovedWipe(w);
+            if (done === "reloaded") return;
+          }
+        } catch (_) {}
+        const rej = await syncWipeState(binding).catch(() => ({ executed: 0, rejected: 0 }));
+        if (rej.reloaded) return;
+        if (rej.rejected) flashMsg("A delete request was rejected on the website.", "info");
+        if (rej.executed) renderPcTab();
+      }
+      renderList();
+      refreshWaitPills();
+      if (binding) writeTelemetry(binding, { force: false, queuedCount: countUnsynced() });
+      if (manual) {
+        if (r.sent) flashMsg(`Sent ${r.sent} report(s) to staff queue ✓`, "success");
+        else if (r.failed) flashMsg("Sync failed — will retry automatically.", "danger");
+        else flashMsg("Nothing waiting to sync.", "info");
+      }
+    }
+
+    $("syncNowBtn").addEventListener("click", () => doSync(true));
+    window.addEventListener("online", () => { refreshNet(); doSync(false); });
+    window.addEventListener("offline", refreshNet);
+    setInterval(() => { if (navigator.onLine) doSync(false); }, 60000);
+
+    function showMain() {
+      pinGate.classList.add("d-none");
+      staffMain.classList.remove("d-none");
+      markStaffView();
+      const binding = loadBinding();
+      if (binding) writeTelemetry(binding, { force: true, queuedCount: countUnsynced() });
+      let savedTab = "dashboard";
+      try { savedTab = sessionStorage.getItem("bafsd-staff-tab") || "dashboard"; } catch (_) {}
+      setTab(savedTab);
+      refreshNet();
+      renderList();
+      refreshWaitPills();
+      doSync(false);
+    }
+
+    refreshNet();
+    bootGate();
+  </script>
+</body>
+</html>

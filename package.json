@@ -1,0 +1,65 @@
+{
+  "name": "computer-lab-report",
+  "version": "1.0.0",
+  "description": "Computer Lab Report — offline-capable student PC problem reporting app for BAFSD lab PCs.",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.bafsd.labreport",
+    "productName": "Computer Lab Report",
+    "directories": {
+      "output": "dist-v2"
+    },
+    "files": [
+      "index.html",
+      "rptview.html",
+      "404.html",
+      "report-lib.js",
+      "logo.png",
+      "report-icon.svg",
+      "icon-192.png",
+      "icon-512.png",
+      "electron-main.js",
+      "electron-preload.js",
+      "package.json"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "alhanafib",
+        "repo": "report-app"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "differentialPackage": true,
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Computer Lab Report"
+    },
+    "portable": {
+      "artifactName": "Computer-Lab-Report-Portable-1.0.0.exe"
+    }
+  },
+  "dependencies": {
+    "electron-updater": "^6.3.0"
+  },
+  "devDependencies": {
+    "electron": "^36.9.5",
+    "electron-builder": "^25.1.8"
+  },
+  "allowScripts": {
+    "electron@36.9.5": true
+  }
+}
